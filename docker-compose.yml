@@ -1,0 +1,16 @@
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=production
+      - DB_CONNECTION=mysql
+      - DB_HOST=tuservidor.mysql.railway.app
+      - DB_PORT=57554
+      - DB_DATABASE=railway
+      - DB_USERNAME=root
+      - DB_PASSWORD=VfFkbhjRrAqkpIwMrjQXmXyTxjIvbcKZ
+    volumes:
+      - .:/var/www/html
