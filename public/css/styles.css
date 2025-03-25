@@ -11327,3 +11327,21 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
     margin-left: -15rem;
   }
 }
+#caption-carousel {
+  max-width: 75%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  #caption-carousel h5 {
+      font-size: 1rem;
+  }
+  #caption-carousel p {
+      font-size: 0.8rem;
+  }
+}

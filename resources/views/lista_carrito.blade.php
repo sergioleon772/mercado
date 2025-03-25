@@ -50,7 +50,7 @@
                             <div class="d-flex flex-row align-items-center">
                                 <h4 class="mr-1">${{ $producto->precio }}</h4>
                             </div>
-                            <h6 class="text-success">Free shipping</h6>
+                            <h6 class="text-success">Envio gratis</h6>
                             <div class="d-flex flex-column mt-4">
                                 <a href="/quitar_carrito/{{ $producto->carrito_id }}" onclick="return confirm('¿Quitar del carrito?')" class="btn btn-danger">Quitar del Carrito</a>
                             </div>

@@ -71,7 +71,7 @@
     </div>
 </div>
 
-<!-- <div class="container mt-5 mb-5">
+ <div class="container mt-5 mb-5">
     <div class="row">
         @include('mensajes')
         @foreach ( $productos as $producto )
@@ -85,7 +85,7 @@
         </div>
         @endforeach
     </div>
-</div> -->
+</div> 
 
 
 {{View::make('Templates.footer')}}

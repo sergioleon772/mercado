@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Models\Carrito;
 use App\Models\Orden;
 use App\Models\Producto;
+use App\Models\Contacto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +26,7 @@ class ProductoController extends Controller
     }
     public function home()
     {
-        $datos['productos'] = Producto::paginate(3);
+        $datos['productos'] = Producto::paginate(5);
         return view('index',$datos);
     }
 
@@ -211,4 +212,26 @@ class ProductoController extends Controller
 
         return view('mis_ordenes',['ordenes'=>$ordenes]);
     }
+
+    
+
+    public function contact(Request $request)
+    {
+    // Validación de los datos del formulario
+        $validated = $request->validate([
+            'nombre' => 'required|string',
+            'direccion' => 'required|string',
+            'email' => 'required|email',
+            'telefono' => 'required|string',
+            'asunto' => 'required|string',
+            'mensaje' => 'required|string',
+        ]);
+
+        // Guardar los datos en la tabla "contactos"
+        Contacto::create($validated);
+
+        // Redireccionar con un mensaje de éxito
+        return back()->with('success', 'Mensaje enviado con éxito');
+    }
+
 }

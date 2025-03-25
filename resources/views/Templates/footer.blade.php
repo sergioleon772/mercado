@@ -10,10 +10,10 @@
 
         <!-- Right -->
         <div>
-            <a href="" class="text-white me-4"><i class="bi bi-facebook"></i></a>
-            <a href="" class="text-white me-4"><i class="bi bi-twitter"></i></a>
-            <a href="" class="text-white me-4"><i class="bi bi-google"></i></a>
-            <a href="" class="text-white me-4"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="text-white me-4"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="text-white me-4"><i class="bi bi-twitter"></i></a>
+            <a href="#" class="text-white me-4"><i class="bi bi-google"></i></a>
+            <a href="#" class="text-white me-4"><i class="bi bi-instagram"></i></a>
         </div>
         <!-- Right -->
 
@@ -67,8 +67,8 @@
             <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px"/>
             <p><i class="fas fa-home mr-3"></i> Talca, Chile</p>
             <p><i class="fas fa-envelope mr-3"></i> mercadoprov@gmail.com</p>
-            <p><i class="fas fa-phone mr-3"></i> + 56 91938123</p>
-            <p><i class="fas fa-print mr-3"></i> + 56 99451344</p>
+            <p><i class="fas fa-phone mr-3"></i> + 56 992527915</p>
+            
             </div>
             <!-- Grid column -->
         </div>
@@ -80,7 +80,7 @@
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
         
-        <p>© 2020 Copyright: Mercado Proveedores</p>
+        <p>© 2025 Copyright: Mercado Proveedores</p>
     </div>
     <!-- Copyright -->
     </footer>

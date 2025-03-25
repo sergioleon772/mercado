@@ -34,6 +34,7 @@ Route::get('catalogo', [ProductoController::class, 'catalogo']);
 
 Route::get('/logout', [LogoutController::class,'logout']);
 
+Route::post('/contacto', [ProductoController::class, 'contact'])->name('contact');  // Enviar mensaje de contacto
 
 Route::get('/perfil', function () {
     return view('perfil');

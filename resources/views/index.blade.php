@@ -61,72 +61,87 @@
     <!-- Fin Te Ofrecemos -->
 
     <!-- Carousel con productos -->
-    <div id="carouselExampleControls" class="container carousel slide" data-bs-ride="carousel">
-        <h1 class="text-center mt-5" style="font-weight: lighter;">Productos Disponibles</h1>
-        <div class="carousel-inner">
-            @foreach ( $productos as $producto )
-            <div class="carousel-item {{ $producto['id']==1?'active':'' }}">
-                <img src="{{ asset('storage').'/'.$producto->imagen }}" class="d-block " alt="...">
-                <div class="carousel-caption rounded-pill" id="caption-carousel" >
-                    <h1 style="font-weight: lighter;" id="fuente">{{ $producto['titulo'] }}</h1>
-                    <p id="fuente">{{ $producto['descripcion'] }}</p>
+    <!-- Carousel con productos mejorado -->
+<div id="carouselExampleControls" class="container carousel slide" data-bs-ride="carousel">
+    <h1 class="text-center mt-5" style="font-weight: lighter;">Productos Mas vistos</h1>
+    <div class="carousel-inner">
+        @foreach ($productos as $index => $producto)
+        <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+            <div class="d-flex justify-content-center">
+                <div class="card shadow-sm" style="width: 18rem;">
+                    <img src="{{ asset('storage').'/'.$producto->imagen }}" class="card-img-top" alt="{{ $producto->titulo }}">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ $producto->titulo }}</h5>
+                        <p class="card-text small">{{ Str::limit($producto->descripcion, 100) }}</p>
+                        <a href="#" class="btn btn-primary btn-sm">Ver más</a>
+                    </div>
                 </div>
             </div>
-            @endforeach
         </div>
-        
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true" id="btn-carousel"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true" id="btn-carousel"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-        <div class="d-flex justify-content-center">
-            <a href="catalogo" class="btn btn-success rounded-pill w-25">Ver más productos</a>
-        </div>
-        
+        @endforeach
     </div>
+    
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+    
+    <div class="d-flex justify-content-center mt-3">
+        <a href="{{ url('catalogo') }}" class="btn btn-success rounded-pill w-25">Ver más productos</a>
+    </div>
+</div>
+
     <!-- Fin Carousel con productos -->
 
     <!-- Contacto -->
-    <div id="prob">
-        <div class="container w-50">
-            <h1 class="text-center" id="fuente">Contacto</h1>
-            <form action="" id="fuente" class="row g-2">
-                <div class="col-12">
-                    <label for="exampleFormControlInput1" class="form-label">Nombre</label>
-                    <input type="email" class="form-control" require id="exampleFormControlInput1" placeholder="Ingrese su nombre"> 
-                </div>
-                <div class="col-12">
-                    <label for="exampleFormControlInput1" class="form-label">Direccion</label>
-                    <input type="text" class="form-control" require id="exampleFormControlInput1" placeholder="Ingrese su direccion"> 
-                </div>
-                <div class="col-6">
-                    <label for="exampleFormControlInput1" class="form-label">Email</label>
-                    <input type="text" class="form-control" require id="exampleFormControlInput1" placeholder="Ingrese su email"> 
-                </div>
-                <div class="col-6">
-                    <label for="exampleFormControlInput1" class="form-label">Telefono</label>
-                    <input type="text" class="form-control" require id="exampleFormControlInput1" placeholder="Ingrese su telefono"> 
-                </div>
-                <div class="col-12">
-                    <label for="exampleFormControlInput1" class="form-label">Asunto</label>
-                    <input type="text" class="form-control" require id="exampleFormControlInput1" placeholder="Ingrese su asunto"> 
-                </div>
-                <div class="col-12">
-                    <label for="exampleFormControlInput1" class="form-label">Mensaje</label>
-                    <textarea class="form-control" cols="30" rows="5"></textarea>
-                </div>
-
-                <div class="col-12 d-flex justify-content-center">
-                    <button class="btn btn-dark">Enviar</button>
-                </div>
-                
-            </form>
-        </div>
+    @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
     </div>
+@endif
+
+    <div id="prob">
+    <div class="container w-50">
+        <h1 class="text-center" id="fuente">Contacto</h1>
+        <form action="{{ route('contact') }}" method="POST" id="fuente" class="row g-2">
+            @csrf  <!-- Asegúrate de incluir la protección CSRF -->
+            
+            <div class="col-12">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" name="nombre" class="form-control" required placeholder="Ingrese su nombre">
+            </div>
+            <div class="col-12">
+                <label for="direccion" class="form-label">Direccion</label>
+                <input type="text" name="direccion" class="form-control" required placeholder="Ingrese su direccion">
+            </div>
+            <div class="col-6">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" required placeholder="Ingrese su email">
+            </div>
+            <div class="col-6">
+                <label for="telefono" class="form-label">Telefono</label>
+                <input type="text" name="telefono" class="form-control" required placeholder="Ingrese su telefono">
+            </div>
+            <div class="col-12">
+                <label for="asunto" class="form-label">Asunto</label>
+                <input type="text" name="asunto" class="form-control" required placeholder="Ingrese su asunto">
+            </div>
+            <div class="col-12">
+                <label for="mensaje" class="form-label">Mensaje</label>
+                <textarea name="mensaje" class="form-control" cols="30" rows="5" required></textarea>
+            </div>
+
+            <div class="col-12 d-flex justify-content-center">
+                <button class="btn btn-dark">Enviar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
     <!-- Fin Contacto -->
 
     {{View::make('Templates.footer')}}
