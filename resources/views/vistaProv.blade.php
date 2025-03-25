@@ -37,7 +37,7 @@
                         </div>
                         <div class="card mb-3">
                             <div class="card-body">
-                                <h5 class="card-title">Felipe Agurto Henríquez <i class="bi bi-trash justify-content-end"></i></h5>
+                                <h5 class="card-title">Felipe Luis <i class="bi bi-trash justify-content-end"></i></h5>
                                 <h6 class="card-subtitle mb-2 text-muted">Cantidad: 20</h6>
                                 <p class="card-text">Buena calidad. El producto cumple con la descripción pero el diseño muy simple a mi gusto. De poder venderlos compraré más</p>
                             </div>

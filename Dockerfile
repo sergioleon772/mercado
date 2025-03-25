@@ -26,7 +26,7 @@ RUN php artisan storage:link
 
 # Configurar permisos para storage y cache
 RUN chmod -R 755 storage bootstrap/cache
-
+RUN chmod -R 755 public
 # Generar clave de Laravel
 RUN php artisan key:generate
 

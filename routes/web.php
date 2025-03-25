@@ -68,6 +68,13 @@ Route::get('registro_proveedor',function(){
 Route::get('/admin', function () {
     return view('Admin/admin');
 });
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin', function () {
+        return view('Admin/admin');
+    });
+});
+
+
 
 
 // COMPRADOR
