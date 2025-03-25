@@ -22,7 +22,7 @@ class ProductoController extends Controller
     public function index()
     {
         $datos['productos'] = Producto::all();
-        return view('admin.productos.productos',$datos);
+        return view('Admin.productos.productos',$datos);
     }
     public function home()
     {
