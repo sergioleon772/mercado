@@ -66,7 +66,7 @@ Route::get('registro_proveedor',function(){
 });
 
 Route::get('/admin', function () {
-    return view('admin/admin');
+    return view('Admin/admin');
 });
 
 
