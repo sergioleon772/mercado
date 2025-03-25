@@ -20,6 +20,13 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Instalar dependencias de Laravel
 RUN composer install --no-dev --optimize-autoloader
 
+RUN php artisan storage:link
+
+
+
+# Configurar permisos para storage y cache
+RUN chmod -R 755 storage bootstrap/cache
+
 # Generar clave de Laravel
 RUN php artisan key:generate
 
