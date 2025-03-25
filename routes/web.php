@@ -72,30 +72,30 @@ Route::get('/admin', function () {
 
 // COMPRADOR
 Route::get('compradores', function () {
-    return view('admin/comprador/compradores');
+    return view('Admin/comprador/compradores');
 });
 Route::get('registrarComp', function () {
-    return view('admin/comprador/registrarComp');
+    return view('Admin/comprador/registrarComp');
 });
 Route::get('actualizarComp', function () {
-    return view('admin/comprador/actualizarComp');
+    return view('Admin/comprador/actualizarComp');
 });
 Route::get('eliminarComp', function () {
-    return view('admin/comprador/eliminarComp');
+    return view('Admin/comprador/eliminarComp');
 });
 
 // PROVEEDOR
 Route::get('proveedores', function () {
-    return view('admin/proveedor/proveedores');
+    return view('Admin/proveedor/proveedores');
 });
 Route::get('registrarProv', function () {
-    return view('admin/proveedor/registrarProv');
+    return view('Admin/proveedor/registrarProv');
 });
 Route::get('actualizarProv', function () {
-    return view('admin/proveedor/actualizarProv');
+    return view('Admin/proveedor/actualizarProv');
 });
 Route::get('eliminarProv', function () {
-    return view('admin/proveedor/eliminarProv');
+    return view('Admin/proveedor/eliminarProv');
 });
 Route::get('/vistaProv', function () {
     return view('vistaProv');
@@ -106,15 +106,15 @@ Route::get('admin/perfilVendedor', function () {
 
 // PRODUCTO
 Route::get('admin/productos', function () {
-    return view('admin/productos/productos');
+    return view('Admin/productos/productos');
 });
 Route::get('admin/eliminarProd', function () {
-    return view('admin/productos/eliminarProd');
+    return view('Admin/productos/eliminarProd');
 });
 
 // CONTACTO
 Route::get('admin/contactos', function () {
-    return view('admin/contactos');
+    return view('Admin/contactos');
 });
 
 // CATALOGO
