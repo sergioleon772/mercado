@@ -4,8 +4,10 @@ nav.navbar a {
     font-weight: bold;
 }
 html, body {
-    overflow-x: hidden;
+    max-width: 100%;
     width: 100%;
+    overflow-x: hidden;
+   
 }
 
 * {
@@ -17,10 +19,10 @@ html, body {
 .logo1 {
     max-width: 100%;
     height: auto;
-    display: block;
+    display: flex;
 }
 .container {
-    max-width: 100vw;
+    max-width: 100%;
     overflow-x: hidden;
 }
 .row {
