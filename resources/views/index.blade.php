@@ -14,8 +14,9 @@
                 </div>
                 
             </div>
-            <div class="col-sm-12 col-md-7">
-                <img class="logo1" src="{!! asset('imagenes/logo1.png') !!}">
+            <div class="col-sm-12 col-md-7" >
+            <img class="logo1" src="{!! asset('imagenes/logo1.png') !!}" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+
             </div>
         </div>
     </div>
