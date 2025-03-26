@@ -32,7 +32,9 @@
                     <td>{{ $producto->cantidad }}</td>
                     <td>{{ $producto->descripcion }}</td>
                     <td>
-                        <img src="{{ asset('storage').'/'.$producto->imagen }}" width="100" alt="">
+                        
+                        <img src="{{ $producto->imagen }}" class="img-fluid img-responsive rounded product-image">
+
                     </td>
                     <td>
                     

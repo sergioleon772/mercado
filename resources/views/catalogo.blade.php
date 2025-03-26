@@ -30,7 +30,7 @@
             @include('mensajes')
             @foreach ( $productos as $producto )
                 <div class="row p-2 bg-white border rounded mb-3">
-                    <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image" src="{{ asset('storage').'/'.$producto->imagen }}"></div>
+                    <div class="col-md-3 mt-1"> <img src="{{ $producto->imagen }}" class="img-fluid img-responsive rounded product-image"></div>
                     <div class="col-md-6 mt-1">
                         <h5 id="fuente">{{ $producto['titulo'] }}</h5>
                         <div class="d-flex flex-row">
@@ -76,7 +76,8 @@
         @include('mensajes')
         @foreach ( $productos as $producto )
         <div class="card me-2" style="width: 18rem;">
-            <img src="{{ asset('storage').'/'.$producto->imagen }}" class="card-img-top" alt="...">
+           <!-- <img src="{{ asset('storage').'/'.$producto->imagen }}" class="card-img-top" alt="...">-->
+            <img src="{{ $producto->imagen }}" class="img-fluid img-responsive rounded product-image">
             <div class="card-body">
                 <h5 class="card-title">{{$producto['titulo']}}</h5>
                 <p class="card-text">{{$producto['descripcion']}}</p>

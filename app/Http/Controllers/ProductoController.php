@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Http\Requests\LoginRequest;
 use App\Models\Carrito;
 use App\Models\Orden;
@@ -49,19 +50,27 @@ class ProductoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //$datosProducto = request()->all(); //Muestra todos los datos
-        $datosProducto = request()->except('_token');   //Muestra todos los datos exepto "_token" para agregarlos a la BD
+    
 
-        if($request->hasFile('imagen')){    //Agregar imagen a carpeta uploads de storage
-            $datosProducto['imagen'] = $request->file('imagen')->store('uploads','public');
-        }
+public function store(Request $request)
+{
+    $datosProducto = request()->except('_token');
 
-        Producto::insert($datosProducto);
-        // return response()->json($datosProducto);
-        return redirect('producto')->with('success','Producto ingresado');
+    if ($request->hasFile('imagen')) {
+        $uploadedFile = $request->file('imagen');
+
+        // Subir a Cloudinary y obtener la URL
+        $uploadedImage = Cloudinary::upload($uploadedFile->getRealPath(), [
+            'folder' => 'productos' // Carpeta en Cloudinary
+        ]);
+
+        $datosProducto['imagen'] = $uploadedImage->getSecurePath(); // URL de la imagen
     }
+
+    Producto::insert($datosProducto);
+    return redirect('producto')->with('success', 'Producto ingresado');
+}
+
 
     /**
      * Display the specified resource.
@@ -97,20 +106,62 @@ class ProductoController extends Controller
      * @param  \App\Models\Producto  $producto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        $datosProducto = request()->except(['_token','_method']);
+    
+     
 
-        if($request->hasFile('imagen')){    //Agregar imagen a carpeta uploads de storage
-            $producto = Producto::findOrFail($id);
-            Storage::delete('public/'.$producto->imagen);
-            $datosProducto['imagen'] = $request->file('imagen')->store('uploads','public');
-        }
-
-        Producto::where('id','=',$id)->update($datosProducto);
-        $producto = Producto::findOrFail($id);
-        return view('producto.edit',compact('producto'));
-    }   
+     public function update(Request $request, $id)
+     {
+         $datosProducto = request()->except(['_token', '_method']);
+     
+         if ($request->hasFile('imagen')) {    // Verificar si hay una nueva imagen
+             $producto = Producto::findOrFail($id);
+     
+             // Eliminar la imagen anterior de Cloudinary (si existe)
+             if ($producto->imagen) {
+                 // Extraer el public_id incluyendo la carpeta 'productos'
+                 $publicId = $this->getCloudinaryPublicId($producto->imagen);
+                 
+                 // Eliminar la imagen de Cloudinary
+                 Cloudinary::destroy($publicId); // Elimina la imagen de Cloudinary
+             }
+     
+             // Subir la nueva imagen a Cloudinary
+             $uploadedImage = Cloudinary::upload($request->file('imagen')->getRealPath(), [
+                 'folder' => 'productos', // Especifica la carpeta de almacenamiento en Cloudinary
+             ]);
+     
+             // Obtener la URL segura de la imagen subida
+             $datosProducto['imagen'] = $uploadedImage->getSecurePath(); // Guarda la URL de la imagen subida
+         }
+     
+         // Actualizar el producto en la base de datos
+         Producto::where('id', '=', $id)->update($datosProducto);
+     
+         // Redirigir a la lista de productos con un mensaje de éxito
+         return redirect('/producto')->with('success', 'Producto actualizado exitosamente');
+     }
+     
+     /**
+      * Función para obtener el public_id de Cloudinary
+      * a partir de la URL de la imagen almacenada, considerando la carpeta 'productos'
+      */
+     private function getCloudinaryPublicId($url)
+     {
+         // Obtener la parte de la URL que contiene el public_id
+         $path = parse_url($url, PHP_URL_PATH); // Obtiene el path de la URL
+         $pathArray = explode('/', $path); // Divide la URL en partes
+     
+         // El public_id es la parte después de 'productos/'
+         // y antes de la extensión de la imagen (ejemplo .jpg, .png)
+         array_shift($pathArray); // Elimina la parte 'image'
+         array_shift($pathArray); // Elimina 'upload'
+         
+         $publicId = implode('/', $pathArray); // Crear el public_id con la carpeta 'productos'
+     
+         return $publicId;
+     }
+     
+    
 
     /**
      * Remove the specified resource from storage.
