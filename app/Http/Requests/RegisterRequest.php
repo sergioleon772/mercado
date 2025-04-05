@@ -24,7 +24,7 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'rut' => 'required|unique:users,rut',
+            'rut' => ['required', 'rut_valido', 'unique:users,rut'],
             'name' => 'required',
             'lastname' => 'required',
             'email' => 'required|unique:users,email',

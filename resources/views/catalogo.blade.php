@@ -21,72 +21,81 @@
     </div> 
 </div> 
 
-<!-- Contenido -->
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+    // Escuchar el evento de submit en el formulario
+    $('form').submit(function(e) {
+        e.preventDefault(); // Evitar la recarga de la página
+        var form = $(this);
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                // Actualiza el carrito sin recargar la página
+                $('#carrito-contenedor').html(response.carrito); // Actualiza el contenido del carrito
+                $('#contador-carrito').text(response.contador); // Actualiza el contador de productos
+                
+            },
+            error: function() {
+                alert('Hubo un error al añadir el producto al carrito');
+            }
+        });
+    });
+});
+
+</script>
+
+
 
 <div class="container mt-5 mb-5">
     <div class="d-flex justify-content-center row">
         <h1 class="text-center mb-5" style="font-weight: lighter;">Productos Disponibles</h1>
-        <div class="col-md-10">
-            @include('mensajes')
-            @foreach ( $productos as $producto )
-                <div class="row p-2 bg-white border rounded mb-3">
-                    <div class="col-md-3 mt-1"> <img src="{{ $producto->imagen }}" class="img-fluid img-responsive rounded product-image"></div>
-                    <div class="col-md-6 mt-1">
-                        <h5 id="fuente">{{ $producto['titulo'] }}</h5>
-                        <div class="d-flex flex-row">
-                            <div class="ratings mr-2">
-                                <i class="bi bi-star-fill" style="color: orange;"></i>
-                                <i class="bi bi-star-fill" style="color: orange;"></i>
-                                <i class="bi bi-star-fill" style="color: orange;"></i>
-                                <i class="bi bi-star-fill" style="color: orange;"></i>
-                                <span> {{ $r }} </span>
-                            </div>
-                        </div>
-                        <div class="mt-1 mb-1 spec-1">
-                            <span>Cantidad: {{ $producto['cantidad'] }}</span>
-                        </div>
-                        <div class="mt-1 mb-1 spec-1">
-                            <span>Proveedor: {{$producto['proveedor']}}</span>
-                            <br>
-                        </div>
-                        <p class="text-justify text-truncate">{{ $producto['descripcion'] }}<br><br></p>
-                    </div>
-                    <div class="align-items-center align-content-center col-md-3 border-left mt-1">
-                        <div class="d-flex flex-row align-items-center">
-                            <h4 class="mr-1">${{ $producto['precio'] }}</h4>
-                        </div>
-                        <h6 class="text-success">Free shipping</h6>
-                        <div class="d-flex flex-column mt-4">
-                            <a href="{{url('/producto/'.$producto->id)}}" class="btn btn-outline-primary btn-sm" type="button">Ver Proveedor</a>
-                            <form action="/añadir_carrito" method="POST">
-                                @csrf
-                                <input type="hidden" name="producto_id" value="{{ $producto->id }}">
-                                <button class="btn btn-outline-warning btn-sm mt-2 w-100">Añadir al Carrito</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
+        
     </div>
 </div>
 
- <div class="container mt-5 mb-5">
+<div class="container mt-5 mb-5">
     <div class="row">
         @include('mensajes')
-        @foreach ( $productos as $producto )
-        <div class="card me-2" style="width: 18rem;">
-           <!-- <img src="{{ asset('storage').'/'.$producto->imagen }}" class="card-img-top" alt="...">-->
-            <img src="{{ $producto->imagen }}" class="img-fluid img-responsive rounded product-image">
-            <div class="card-body">
-                <h5 class="card-title">{{$producto['titulo']}}</h5>
-                <p class="card-text">{{$producto['descripcion']}}</p>
-                <a href="{{url('/producto/'.$producto->id)}}" class="btn btn-primary">Ver Proveedor</a>
+
+        @foreach ($productos as $producto)
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card shadow-sm border-light rounded-lg overflow-hidden">
+                <!-- Imagen del producto -->
+                <img src="{{ $producto->imagen }}" class="card-img-top img-fluid" alt="{{ $producto['titulo'] }}">
+
+                <div class="card-body">
+                    <!-- Título del producto -->
+                    <h5 class="card-title text-center text-dark font-weight-bold">{{ $producto['titulo'] }}</h5>
+                    
+                    <!-- Descripción del producto -->
+                    <p class="card-text text-muted" style="font-size: 0.9rem; text-align: justify;">{{ Str::limit($producto['descripcion'], 100) }}</p>
+
+                    <!-- Precio -->
+                    <h4 class="text-center text-success">${{ number_format($producto['precio'], 2) }}</h4>
+
+                    <!-- Botones de acción -->
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="{{url('/producto/'.$producto->id)}}" class="btn btn-primary w-48">Ver Proveedor</a>
+
+                        <!-- Formulario para añadir al carrito -->
+                        <form action="/añadir_carrito" method="POST" class="w-48">
+                            @csrf
+                            <input type="hidden" name="producto_id" value="{{ $producto->id }}">
+                            <button type="submit" class="btn btn-outline-warning w-100 add-to-cart" data-producto-id="{{ $producto->id }}">Añadir al Carrito</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
         @endforeach
     </div>
-</div> 
+</div>
+
 
 
 {{View::make('Templates.footer')}}

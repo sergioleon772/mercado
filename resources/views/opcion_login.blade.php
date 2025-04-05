@@ -1,27 +1,46 @@
 @extends('master')
+
 @section('content')
+    {{ View::make('Templates.header') }}
 
-{{View::make('Templates.header')}}
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+        <div class="row text-center">
 
-<div class="container d-flex justify-content-center" style="margin-top: 10rem;margin-bottom: 10rem;">
-    <div class="row">
-        <div class="col-6 me-5 d-flex justify-content-center align-items-center" style="width: 20rem;height: 20rem;">
-            <a href="/login" id="btn-grande" style="padding: 5rem 4rem;" class="btn btn-outline-success">
-                <h1>Comprador</h1>
-                <i class="bi bi-person d-block" style="font-size: 5rem;"></i>
-            </a>
-        </div>
-        <div class="col-6 ms-5 d-flex justify-content-center align-items-center" style="width: 20rem;height: 20rem;">
-            <a href="login_proveedor" id="btn-grande" class="btn btn-outline-success">
-                <h1>Vendedor</h1>
-                <i class="bi bi-building" style="font-size: 5rem;"></i>
-            </a>
+            <!-- Botón Comprador -->
+            <div class="col-12 col-md-6 mb-4">
+                <a href="/login" id="btn-grande" class="btn btn-outline-success w-100 p-5 shadow-lg rounded"
+                    style="transition: all 0.3s ease-in-out;">
+                    <h2>Usuario</h2>
+                    <i class="bi bi-person d-block" style="font-size: 5rem;"></i>
+                </a>
+            </div>
+
+            <!-- Botón Vendedor -->
+            <div class="col-12 col-md-6 mb-4">
+                <a href="login_proveedor" id="btn-grande" class="btn btn-outline-success w-100 p-5 shadow-lg rounded"
+                    style="transition: all 0.3s ease-in-out;">
+                    <h2>Proveedor</h2>
+                    <i class="bi bi-building d-block" style="font-size: 5rem;"></i>
+                </a>
+            </div>
+
         </div>
     </div>
-</div>
 
-
-
-{{View::make('Templates.footer')}}
-
+    {{ View::make('Templates.footer') }}
 @endsection
+
+@push('styles')
+    <!-- Agregar estilos adicionales si es necesario -->
+    <style>
+        #btn-grande:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 4px 15px rgba(0, 123, 255, 0.5);
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+    </style>
+@endpush

@@ -3,13 +3,13 @@
 
 {{View::make('Templates.header')}}
 
-<form method="POST" action="/login" class="container" style="width: 20rem;margin-top:5rem;">
+<form method="POST" action="/loginprovedor" class="container" style="width: 20rem;margin-top:5rem;">
     @csrf
     <h1 class="text-center" style="margin-bottom: 2rem;">Iniciar Sesión</h1>
     @include('mensajes')
     <!-- Email input -->
     <div class="form-floating mb-3">
-        <input type="text" placeholder="Rut" name="rut" id="form2Example1" class="form-control" />
+        <input type="text" placeholder="Rut" name="rut_empresa" id="form2Example1" class="form-control" />
         <label class="form-label" for="form2Example1">Rut Empresa</label>
     </div>
 

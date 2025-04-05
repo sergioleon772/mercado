@@ -1,29 +1,42 @@
 @extends('Admin.adminMaster')
 @section('content')
+    <div class="container mt-5">
+        <h2>Editar Usuario</h2>
+        <form method="POST" action="{{ route('compradores.update', $comprador->id) }}">
+            @csrf
+            @method('PUT')
 
-<h1 class="text-center mt-5 mb-5">Actualizar Comprador</h1>
+            <div class="mb-3">
+                <label>Rut</label>
+                <input type="text" name="rut" class="form-control" value="{{ $comprador->rut }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label>Nombre</label>
+                <input type="text" name="name" class="form-control" value="{{ $comprador->name }}">
+            </div>
 
-<form class="container" style="width: 20rem;">
-    <!-- Rut input -->
-    <div class="form-outline">
-        <input type="number" id="form2Example1" class="form-control" />
-        <label class="form-label" for="form2Example1">Rut Comprador</label>
+            <div class="mb-3">
+                <label>Apellido</label>
+                <input type="text" name="lastname" class="form-control" value="{{ $comprador->lastname }}">
+            </div>
+
+            <div class="mb-3">
+                <label>Correo</label>
+                <input type="email" name="email" class="form-control" value="{{ $comprador->email }}">
+            </div>
+
+            <div class="mb-3">
+                <label>Teléfono</label>
+                <input type="number" name="phone" class="form-control" value="{{ $comprador->phone }}">
+            </div>
+
+            <div class="mb-3">
+                <label>Dirección</label>
+                <input type="text" name="address" class="form-control" value="{{ $comprador->address }}">
+            </div>
+
+            <button type="submit" class="btn btn-success">Actualizar</button>
+            <a href="/compradores" class="btn btn-secondary">Volver</a>
+        </form>
     </div>
-
-    <!-- Nombre input -->
-    <div class="form-outline">
-        <input type="email" id="form2Example2" class="form-control" />
-        <label class="form-label" for="form2Example2">Correo Electrónico</label>
-    </div>
-
-    <!-- Apellidos input -->
-    <div class="form-outline">
-        <input type="text" id="form2Example2" class="form-control" />
-        <label class="form-label" for="form2Example2">Teléfono</label>
-    </div>
-
-    <!-- Submit button -->
-    <a type="button" href="compradores" class="btn btn-outline-primary btn-block mb-4 ms-5"">Volver</a>
-    <button type="button" class="btn btn-primary btn-block mb-4"">Actualizar</button>
-
 @endsection
