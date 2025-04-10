@@ -105,7 +105,9 @@
         </button>
 
         <div class="d-flex justify-content-center mt-3">
-            <a href="{{ url('catalogo') }}" class="btn btn-success rounded-pill w-25">Ver más productos</a>
+
+            <a href="{{ url('catalogo') }}" class="btn btn-success rounded-pill w-100 w-md-25">Ver más productos</a>
+
         </div>
     </div>
 
@@ -115,7 +117,8 @@
 
 
     <div id="prob">
-        <div class="container w-50">
+        <div class="container w-100 w-md-75 w-lg-50">
+
             <h1 class="text-center" id="fuente">Contacto</h1>
             <form action="{{ route('contact') }}" method="POST" id="fuente" class="row g-2">
                 @csrf <!-- Asegúrate de incluir la protección CSRF -->
