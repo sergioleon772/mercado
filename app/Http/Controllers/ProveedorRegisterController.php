@@ -39,7 +39,7 @@ class ProveedorRegisterController extends Controller
 
     
     public function create() {
-        return view('Admin.proveedor.registrarprov'); // Vista que usará el admin
+        return view('Admin.proveedor.registrarProv'); // Vista que usará el admin
     }
     
     
