@@ -20,6 +20,8 @@ fi
 php artisan config:clear
 php artisan config:cache
 
+php artisan key:generate
+
 # Crear enlace simbólico a la carpeta de storage
 php artisan storage:link || true
 
