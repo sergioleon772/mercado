@@ -25,8 +25,9 @@ $total = ProductoController::itemCarrito();
                     @include('mensajes')
                     @foreach ($productos as $producto)
                         <div class="row p-2 bg-white border rounded mb-3">
-                            <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image"
-                                    src="{{ $producto->imagen }}"></div>
+                            <div class="col-md-3 mt-1">
+                                <img class="img-fluid img-responsive rounded product-image" src="{{ $producto->imagen }}">
+                            </div>
                             <div class="col-md-6 mt-1">
                                 <h5 id="fuente">{{ $producto->titulo }}</h5>
                                 <div class="d-flex flex-row">
@@ -37,19 +38,25 @@ $total = ProductoController::itemCarrito();
                                         <i class="bi bi-star-fill" style="color: orange;"></i>
                                     </div>
                                 </div>
-                                <div class="mt-1 mb-1 spec-1">
-                                    <span>Cantidad: {{ $producto->cantidad }}</span>
+                                <div class="d-flex align-items-center">
+                                    <a href="/carrito/disminuir/{{ $producto->carrito_id }}"
+                                        class="btn btn-outline-secondary btn-sm me-2">−</a>
+                                    <span>{{ $producto->carrito_cantidad }}</span>
+                                    <a href="/carrito/aumentar/{{ $producto->carrito_id }}"
+                                        class="btn btn-outline-secondary btn-sm ms-2">+</a>
                                 </div>
+
                                 <div class="mt-1 mb-1 spec-1">
                                     <strong>Proveedor:</strong> {{ $producto->proveedor_marca ?? 'Sin proveedor' }}
-
                                 </div>
 
                                 <p class="text-justify text-truncate">{{ $producto->descripcion }}<br><br></p>
                             </div>
                             <div class="align-items-center align-content-center col-md-3 border-left mt-1">
                                 <div class="d-flex flex-row align-items-center">
-                                    <h4 class="mr-1">${{ $producto->precio }}</h4>
+                                    <h4 class="mr-1">${{ $producto->precio * $producto->carrito_cantidad }}</h4>
+                                    <small class="text-muted">(${{ $producto->precio }} c/u)</small>
+
                                 </div>
                                 <h6 class="text-success">Envio gratis</h6>
                                 <div class="d-flex flex-column mt-4">
@@ -60,6 +67,7 @@ $total = ProductoController::itemCarrito();
                             </div>
                         </div>
                     @endforeach
+
                     <div class="d-flex justify-content-center">
                         <a href="catalogo" class="btn btn-outline-secondary me-2">Volver</a>
                         <a href="ordenar_ahora" class="btn btn-success">Ordenar Ahora</a>
@@ -69,25 +77,25 @@ $total = ProductoController::itemCarrito();
         </div>
 
         <!-- <div class="container mt-5 mb-5">
-                            <div class="row">
-                                @include('mensajes')
-                                @foreach ($productos as $producto)
+                                        <div class="row">
+                                            @include('mensajes')
+                                            @foreach ($productos as $producto)
     <div class="card me-2" style="width: 18rem;">
-                                        <img src="{{ asset('storage') . '/' . $producto->imagen }}" class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{ $producto->titulo }}</h5>
-                                            <p class="card-text">{{ $producto->descripcion }}</p>
-                                            <a href="/quitar_carrito/{{ $producto->carrito_id }}" class="btn btn-danger">Quitar del Carrito</a>
+                                                    <img src="{{ asset('storage') . '/' . $producto->imagen }}" class="card-img-top" alt="...">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">{{ $producto->titulo }}</h5>
+                                                        <p class="card-text">{{ $producto->descripcion }}</p>
+                                                        <a href="/quitar_carrito/{{ $producto->carrito_id }}" class="btn btn-danger">Quitar del Carrito</a>
+                                                    </div>
+                                                </div>
+    @endforeach
                                         </div>
                                     </div>
-    @endforeach
-                            </div>
-                        </div>
 
-                        <div class="container mb-3">
-                            <a href="producto" class="btn btn-outline-secondary">Volver</a>
-                            <a href="ordenar_ahora" class="btn btn-success">Ordenar Ahora</a>
-                        </div> -->
+                                    <div class="container mb-3">
+                                        <a href="producto" class="btn btn-outline-secondary">Volver</a>
+                                        <a href="ordenar_ahora" class="btn btn-success">Ordenar Ahora</a>
+                                    </div> -->
     @endif
 
     {{ View::make('Templates.footer') }}

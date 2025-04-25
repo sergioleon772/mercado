@@ -9,5 +9,5 @@ class Orden extends Model
 {
     use HasFactory;
     public $table = 'ordenes';
-    public $timestamps = false;
+    public $timestamps = true;
 }

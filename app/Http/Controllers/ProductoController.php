@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 
 class ProductoController extends Controller
@@ -196,6 +197,45 @@ public function destroyProveedor($id)
      }
      
 
+     public function agregarCarrito(Request $request)
+{
+    // Validar los datos
+    $request->validate([
+        'producto_id' => 'required|exists:productos,id',
+        'cantidad' => 'required|integer|min:1',
+    ]);
+
+    $productoId = $request->producto_id;
+    $cantidad = $request->cantidad;
+
+    // Verificar si el usuario está autenticado
+    if (!Auth::check()) {
+        return redirect()->route('login')->with('error', 'Debes iniciar sesión para añadir al carrito.');
+    }
+
+    $userId = Auth::id();
+
+    // Verificar si el producto ya está en el carrito
+    $carritoExistente = Carrito::where('user_id', $userId)
+                                ->where('producto_id', $productoId)
+                                ->first();
+
+    if ($carritoExistente) {
+        // Si ya existe, actualizamos la cantidad
+        $carritoExistente->cantidad += $cantidad;
+        $carritoExistente->save();
+    } else {
+        // Si no existe, lo agregamos
+        Carrito::create([
+            'user_id' => $userId,
+            'producto_id' => $productoId,
+            'cantidad' => $cantidad,
+        ]);
+    }
+
+    return redirect()->back()->with('success', 'Producto añadido al carrito.');
+}
+
 
     /**
      * Display the specified resource.
@@ -355,65 +395,119 @@ public function destroyProveedor($id)
         }
         return redirect('/login');
     }*/
-    public function añadirCarrito(Request $req)
-{
-    if (Auth::check()) {
-        $producto_id = $req->producto_id;
-        $user_id = Auth::user()->id;
 
-        // Verificar si el producto ya está en el carrito
+    
+
+
+
+    public function añadirCarrito(Request $req)
+    {
+        if (!Auth::check()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Debes iniciar sesión para añadir productos al carrito.'
+            ], 401);
+        }
+    
+        $producto_id = $req->producto_id;
+        $cantidad = intval($req->cantidad); // capturar la cantidad del formulario
+        if ($cantidad < 1) $cantidad = 1;
+    
+        $user_id = Auth::user()->id;
+    
         $carrito = Carrito::where('user_id', $user_id)
                          ->where('producto_id', $producto_id)
                          ->first();
-
+    
         if (!$carrito) {
-            // Si el producto no está en el carrito, agregarlo con cantidad 1
             $carrito = new Carrito();
             $carrito->user_id = $user_id;
             $carrito->producto_id = $producto_id;
-            $carrito->cantidad = 1;  // Establecer la cantidad a 1 al agregarlo por primera vez
+            $carrito->cantidad = $cantidad;
             $carrito->save();
         } else {
-            // Si el producto ya está en el carrito, aumentar la cantidad
-            $carrito->cantidad++;
+            $carrito->cantidad += $cantidad; // sumamos la cantidad elegida
             $carrito->save();
         }
+    
+        // Contar total actualizado
+        $contador = Carrito::where('user_id', $user_id)->sum('cantidad');
+    
+        return response()->json([
+            'success' => true,
+            'contador' => $contador
+        ]);
+    }
+    
 
-        return redirect('catalogo')->with('success', 'Producto agregado al carrito');
+
+
+static function itemCarrito(){
+    if(Auth::check()){
+        $userId = Auth::user()->id;
+        return Carrito::where('user_id', $userId)->sum('cantidad'); // ✅ suma la cantidad total
     }
 
-    return redirect('/login');
+    return 0; // por si el usuario no está logueado
+}
+
+    public function listaCarrito()
+    {
+        if (!Auth::check()) {
+            return redirect('/login');
+        }
+    
+        $userId = Auth::user()->id;
+    
+        $productos = DB::table('carrito')
+            ->join('productos', 'carrito.producto_id', '=', 'productos.id')
+            ->leftJoin('proveedores', 'productos.proveedor_id', '=', 'proveedores.id')
+            ->where('carrito.user_id', $userId)
+            ->select(
+                'productos.*',
+                'carrito.id as carrito_id',
+                'carrito.cantidad as carrito_cantidad',
+                'proveedores.marca as proveedor_marca'
+            )
+            ->get();
+    
+        $total = $productos->count();
+    
+        return view('lista_carrito', [
+            'productos' => $productos,
+            'total' => $total
+        ]);
+    }
+    public function aumentarCantidad($id)
+{
+    $carritoItem = DB::table('carrito')->where('id', $id)->first();
+
+    if ($carritoItem) {
+        DB::table('carrito')->where('id', $id)->update([
+            'cantidad' => $carritoItem->cantidad + 1
+        ]);
+    }
+
+    return redirect()->back();
+}
+
+public function disminuirCantidad($id)
+{
+    $carritoItem = DB::table('carrito')->where('id', $id)->first();
+
+    if ($carritoItem && $carritoItem->cantidad > 1) {
+        DB::table('carrito')->where('id', $id)->update([
+            'cantidad' => $carritoItem->cantidad - 1
+        ]);
+    } elseif ($carritoItem) {
+        // Si la cantidad llega a 1 y se quiere disminuir, puedes eliminar el producto
+        DB::table('carrito')->where('id', $id)->delete();
+    }
+
+    return redirect()->back();
 }
 
 
-
-    static function itemCarrito(){
-        if(Auth::check()){
-            $userId = Auth::user()->id;
-            return Carrito::where('user_id',$userId)->count();
-        }
-    }
-    public function listaCarrito(){
-        if(!Auth::check()){
-            return redirect('/login');
-        }
-        $userId = Auth::user()->id;
-        /*$productos = DB::table('carrito')
-        ->join('productos','carrito.producto_id','=','productos.id')
-        ->where('carrito.user_id',$userId)
-        ->select('productos.*','carrito.id as carrito_id')
-        ->get();*/
-
-        $productos = DB::table('carrito')
-    ->join('productos', 'carrito.producto_id', '=', 'productos.id')
-    ->leftJoin('proveedores', 'productos.proveedor_id', '=', 'proveedores.id')
-    ->where('carrito.user_id', $userId)
-    ->select('productos.*', 'carrito.id as carrito_id', 'proveedores.marca as proveedor_marca')
-    ->get();
-
-
-        return view('lista_carrito',['productos'=>$productos]);
-    }
     public function quitarCarrito($id){
         Carrito::destroy($id);
         return redirect('lista_carrito')->with('success','Producto quitado del carrito');
@@ -424,10 +518,12 @@ public function destroyProveedor($id)
             return redirect('/login');
         }
         $userId = Auth::user()->id;
-        $total = $productos = DB::table('carrito')
-        ->join('productos','carrito.producto_id','=','productos.id')
-        ->where('carrito.user_id',$userId)
-        ->sum('productos.precio');
+        $total = DB::table('carrito')
+    ->join('productos','carrito.producto_id','=','productos.id')
+    ->where('carrito.user_id', $userId)
+    ->select(DB::raw('SUM(productos.precio * carrito.cantidad) as total'))
+    ->value('total');
+
 
         return view('ordenar_ahora',['total'=>$total]);
     }
@@ -439,20 +535,12 @@ public function destroyProveedor($id)
         $userId = Auth::user()->id;
         $allCarrito = Carrito::where('user_id', $userId)->get();
     
-        // Inicializamos el precio total
-        $precioTotal = 0;
+        $fechaOrden = now(); // usar una misma fecha
     
         foreach($allCarrito as $carrito){
-            // Obtener el precio del producto
             $producto = Producto::find($carrito->producto_id);
-            if (!$producto) {
-                continue; // Si no se encuentra el producto, saltamos al siguiente
-            }
+            if (!$producto) continue;
     
-            // Sumar el precio del producto al total
-            $precioTotal += $producto->precio; // Suponiendo que el producto tiene un campo "precio"
-            
-            // Guardar en la tabla ordenes
             $order = new Orden;
             $order->producto_id = $producto->id;
             $order->user_id = $userId;
@@ -460,28 +548,58 @@ public function destroyProveedor($id)
             $order->estado_pago = 'Pendiente';
             $order->estado = 'Pendiente';
             $order->direccion = $req->direccion;
-            $order->precio = $precioTotal; // Ahora guardamos el precio total
+            $order->precio = $producto->precio * $carrito->cantidad;
+            $order->cantidad = $carrito->cantidad;
+            $order->created_at = $fechaOrden; // importante
+            $order->updated_at = $fechaOrden; // importante también
             $order->save();
         }
     
-        // Eliminar productos del carrito después de guardar la orden
         Carrito::where('user_id', $userId)->delete();
-        
+    
         return redirect('/')->with('success', 'Pedido Realizado');
     }
+    
     
     public function misOrdenes(){
         if(!Auth::check()){
             return redirect('/login');
         }
+    
         $userId = Auth::user()->id;
-        $ordenes = DB::table('ordenes')
-        ->join('productos','ordenes.producto_id','=','productos.id')
-        ->where('ordenes.user_id',$userId)
-        ->get();
+    
+        
 
-        return view('mis_ordenes',['ordenes'=>$ordenes]);
+$ordenes = DB::table('ordenes')
+    ->join('productos', 'ordenes.producto_id', '=', 'productos.id')
+    ->where('ordenes.user_id', $userId)
+    ->select(
+        'productos.titulo',
+        'productos.imagen',
+        'ordenes.metodo_pago',
+        'ordenes.direccion',
+        'ordenes.estado',
+        'ordenes.estado_pago',
+        'ordenes.precio',
+        'ordenes.cantidad',
+        'ordenes.created_at'
+    )
+    ->orderBy('ordenes.created_at', 'desc')
+    ->get()
+    ->groupBy(function ($item) {
+        // Si hay una fecha válida, formatearla
+        if (!is_null($item->created_at)) {
+            return Carbon::parse($item->created_at)->format('Y-m-d H:i:s');
+        }
+        // Si no hay fecha, usar una clave de agrupación genérica
+        return 'Fecha no disponible';
+    });
+
+
+    
+        return view('mis_ordenes', ['ordenes' => $ordenes]);
     }
+    
 
     
 

@@ -50,7 +50,6 @@ Route::get('/dashboard_proveedor', [ProveedorRegisterController::class, 'index']
 
 
 
-
 Route::middleware(['auth:proveedor'])->group(function () {
     Route::get('/perfil_proveedor', [ProveedorRegisterController::class, 'perfil'])->name('perfil_proveedor');
     Route::get('/perfil', [ProveedorRegisterController::class, 'edit'])->name('proveedor.perfil');
@@ -95,12 +94,16 @@ Route::get('/perfil', function () {
 Route::resource('producto', ProductoController::class);
 
 // CARRITO Y ORDEN
+Route::get('/carrito/aumentar/{id}', [ProductoController::class, 'aumentarCantidad']);
+Route::get('/carrito/disminuir/{id}', [ProductoController::class, 'disminuirCantidad']);
+
 Route::post('/añadir_carrito', [ProductoController::class, 'añadirCarrito']);
 Route::get('/lista_carrito', [ProductoController::class, 'listaCarrito']);
 Route::get('/quitar_carrito/{id}', [ProductoController::class, 'quitarCarrito']);
 Route::get('/ordenar_ahora', [ProductoController::class, 'ordenarAhora']);
 Route::post('/lugar_pedido', [ProductoController::class, 'lugarPedido']);
 Route::get('/mis_ordenes', [ProductoController::class, 'misOrdenes']);
+Route::post('/agregar_carrito', [ProductoController::class, 'agregarCarrito'])->name('agregar_carrito');
 
 // PERFIL USUARIO
 Route::get('perfil', [UserController::class, 'show']);

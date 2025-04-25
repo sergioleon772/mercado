@@ -1,59 +1,54 @@
 @extends('master')
+
 @section('content')
+    {{ View::make('Templates.header') }}
 
-{{View::make('Templates.header')}}
+    <div class="container mt-5 mb-5">
 
-<div class="container mt-5 mb-5">
-    
-    <div class="d-flex justify-content-center row">
-        <h1 class="text-center mb-5" style="font-weight: lighter;">Mis Ordenes</h1>
-        <div class="col-md-10">
-            @foreach ( $ordenes as $orden )
-                <div class="row p-2 bg-white border rounded mb-3">
-                    <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image" src="{{ $orden->imagen }}"></div>
-                    <div class="col-md-6 mt-1">
-                        <h5 id="fuente">{{ $orden->titulo }}</h5>
-                        <div class="d-flex flex-row">
-                            <div class="ratings mr-2">
-                                <i class="bi bi-star-fill" style="color: orange;"></i>
-                                <i class="bi bi-star-fill" style="color: orange;"></i>
-                                <i class="bi bi-star-fill" style="color: orange;"></i>
-                                <i class="bi bi-star-fill" style="color: orange;"></i>
-                            </div>
-                        </div>
-                        <div class="mt-1 mb-1 spec-1">
-                            <span>Estado de Envío: {{ $orden->estado }}</span>
-                        </div>
-                        <div class="mt-1 mb-1 spec-1">
-                            <span>Estado de Pago: {{$orden->estado_pago}}</span>
-                        </div>
-                        <div class="mt-1 mb-1 spec-1">
-                            <span>Método de Pago: {{$orden->metodo_pago}}</span>
-                        </div>
-                        <div class="mt-1 mb-1 spec-1">
-                            <span>Dirección de Envío: {{$orden->direccion}}</span>
+        <div class="d-flex justify-content-center row">
+            <h1 class="text-center mb-5" style="font-weight: lighter;">Mis Ordenes</h1>
+            <div class="col-md-10">
+                @foreach ($ordenes as $fecha => $items)
+                    @php
+                        $total = $items->sum('precio'); // Sumar el precio total de los productos
+                        $metodo = $items->first()->metodo_pago; // Tomar el método de pago del primer producto
+                        $direccion = $items->first()->direccion; // Dirección de envío del primer producto
+                        $estado = $items->first()->estado; // Estado de envío
+                        $estado_pago = $items->first()->estado_pago; // Estado del pago
+                    @endphp
+
+                    <div class="card mb-4 p-3 shadow-sm">
+                        <h6 class="text-muted">Fecha de orden:
+                            {{ $fecha != 'Fecha no disponible' ? $fecha : 'No disponible' }}</h6>
+
+
+                        <p>Total Pagado: ${{ number_format($total, 0, ',', '.') }}</p>
+                        <p>Método de Pago: {{ $metodo }}</p>
+                        <p>Dirección de Envío: {{ $direccion }}</p>
+                        <p>Estado: {{ $estado }} | Pago: {{ $estado_pago }}</p>
+
+                        <hr>
+                        <div class="row">
+                            @foreach ($items as $item)
+                                <div class="col-md-3 text-center mb-3">
+                                    <img src="{{ $item->imagen }}" class="img-fluid rounded" style="max-height: 100px;">
+                                    <p>{{ $item->titulo }}</p>
+                                    <small>{{ $item->cantidad }}x -
+                                        ${{ number_format($item->precio / $item->cantidad, 0, ',', '.') }}</small>
+
+                                </div>
+                            @endforeach
                         </div>
                     </div>
-                    <div class="align-items-center align-content-center col-md-3 border-left mt-1">
-                        
-                        <div class="d-flex flex-row align-items-center">
-                        <h4 class="mr-1">${{ number_format(floatval($orden->precio), 2) }}</h4>
+                @endforeach
 
-
-                        </div>
-                        <h6 class="text-success">Free shipping</h6>
-                    </div>
-                </div>
-            @endforeach
-            <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content-center">
                     <a href="/" class="btn btn-outline-secondary me-2">Volver a Inicio</a>
                     <a href="catalogo" class="btn btn-success">Ordenar Productos</a>
                 </div>
+            </div>
         </div>
     </div>
-</div>
 
-
-{{View::make('Templates.footer')}}
-
+    {{ View::make('Templates.footer') }}
 @endsection
