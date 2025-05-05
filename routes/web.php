@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PagoController;
 use App\Http\Controllers\ProveedorRegisterController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +19,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// AUTH
+
+
+
+
+Route::post('/pago/preferencia', [PagoController::class, 'crearPreferencia'])->name('pago.preferencia');
+Route::post('/pago/procesar', [PagoController::class, 'procesarPago'])->name('pago.procesar');
+Route::get('/pago/exito', [PagoController::class, 'pagoExitoso'])->name('pago.exito');
+Route::get('/pago/transferencia', [PagoController::class, 'mostrarInstruccionesTransferencia'])->name('pago.transferencia');
+
+
+
+Route::get('/pago/exitoso', [PagoController::class, 'pagoExitoso'])->name('pago.exitoso');
+Route::get('/pago/rechazado', [PagoController::class, 'pagoRechazado'])->name('pago.rechazado');
+Route::get('/pago/pendiente', [PagoController::class, 'pagoPendiente'])->name('pago.pendiente');
+
+
+Route::get('/prueba', function () {
+    return view('pago.prueba');
+})->name('pago.prueba');
+
 Route::get('opcion_login', function() {
     return view('opcion_login');
 });
@@ -44,10 +64,13 @@ Route::get('/loginprovedor', [ProveedorRegisterController::class, 'index'])->nam
 
 
 
+
 Route::get('/dashboard_proveedor', [ProveedorRegisterController::class, 'index'])
     ->middleware('auth:proveedor') // Esto asegura que solo los proveedores autenticados pueden acceder al dashboard
     ->name('dashboard.proveedor');
 
+Route::put('/perfil/update', [UserController::class, 'actualizoperfil'])->name('perfilusuario.update');
+Route::post('/actualizarcontrasena', [UserController::class, 'actualizarcontrasena'])->name('actualizarcontrasena');
 
 
 Route::middleware(['auth:proveedor'])->group(function () {
@@ -107,6 +130,9 @@ Route::post('/agregar_carrito', [ProductoController::class, 'agregarCarrito'])->
 
 // PERFIL USUARIO
 Route::get('perfil', [UserController::class, 'show']);
+
+
+
 
 
 // Middleware para rutas administrativas

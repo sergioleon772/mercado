@@ -15,9 +15,14 @@
                 <input type="text" placeholder="rut_empresa" name="rut_empresa" id="rut_empresa" class="form-control" />
                 <label class="form-label" for="form2Example1">Rut Empresa</label>
             </div>
-            <div class="col-6 form-floating">
-                <input type="password" placeholder="Contraseña" name="password" id="form2Example2" class="form-control" />
-                <label class="form-label" for="form2Example2">Contraseña</label>
+            <div class="col-6 form-floating position-relative">
+                <input type="password" id="password" name="password" class="form-control pe-5" required
+                    placeholder="Ingrese una contraseña segura" />
+                <label for="password"><i class="bi bi-lock"></i> Contraseña</label>
+                <button type="button" id="togglePassword"
+                    class="btn position-absolute top-50 end-0 translate-middle-y me-2 p-0 border-0 bg-transparent">
+                    <i class="bi bi-eye-slash fs-5"></i>
+                </button>
             </div>
             <div class="col-6 form-floating">
                 <input type="text" placeholder="marca" name="marca" id="marca" class="form-control" />
@@ -33,18 +38,21 @@
                 <label class="form-label" for="form2Example2">Correo</label>
             </div>
             <div class="col-6 form-floating">
-                <input type="text" placeholder="Telefono" name="telefono" id="telefono" class="form-control" />
+                <input type="number" placeholder="Telefono" name="telefono" id="telefono" class="form-control" />
                 <label class="form-label" for="form2Example2">Teléfono</label>
             </div>
+
             <div class="col-12 form-floating">
-                <input type="text" placeholder="Dirección" name="direccion" id="direccion" class="form-control" />
-                <label class="form-label" for="form2Example2">Dirección</label>
+
+                <input type="text" id="address" name="direccion" class="form-control"
+                    placeholder="Ingresa tu dirección" autocomplete="off" required />
+                <label for="address">Dirección</label>
             </div>
             <!-- <div class="col-2">
-                    <select class="form-control" name="comp_o_emp" id="">
-                        <option selected value="2">Proveedor</option>
-                    </select>
-                </div> -->
+                                                                <select class="form-control" name="comp_o_emp" id="">
+                                                                    <option selected value="2">Proveedor</option>
+                                                                </select>
+                                                            </div> -->
 
             <div class="col-12 d-flex justify-content-center">
                 <a href="/" class="btn btn-outline-secondary me-2">Volver</a>
@@ -54,5 +62,13 @@
     </div>
 
 
+    {{ View::make('Templates.script') }}
+
+
     {{ View::make('Templates.footer') }}
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}&libraries=places&language=es&region=CL&callback=initAutocomplete"
+        async defer></script>
+
+    <script src="{{ asset('js/google-autocomplete.js') }}"></script>
 @endsection

@@ -3,6 +3,11 @@
 @section('content')
     <h1 class="text-center mt-5 mb-5">Menú Proveedores</h1>
 
+    <div class="container">
+        <div class="row w-25 mx-auto">
+            <a href="proveedor/create" class="btn btn-primary mb-3">Agregar Proveedor</a>
+        </div>
+    </div>
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -53,6 +58,6 @@
     <div class="d-flex justify-content-center text-sm">
         {{ $proveedores->links('vendor.pagination.bootstrap-5') }}
     </div>
-    <a href="proveedor/create" class="btn btn-primary mb-3">Agregar Proveedor</a>
+
     </div>
 @endsection

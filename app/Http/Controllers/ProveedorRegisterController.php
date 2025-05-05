@@ -34,9 +34,12 @@ class ProveedorRegisterController extends Controller
             'direccion' => $validated['direccion'],
         ]);
 
-        return redirect('/opcion_login')->with('success', 'Proveedor registrado correctamente');
+        return redirect('/login_proveedor')->with('success', 'Proveedor registrado correctamente');
     }
-
+    public function google() {
+        return view('googleAutocomplete');
+      }
+      
     
     public function create() {
         return view('Admin.proveedor.registrarProv'); // Vista que usará el admin

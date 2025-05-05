@@ -398,7 +398,15 @@ public function destroyProveedor($id)
 
     
 
-
+    public static function calcularTotalCarrito() {
+        $total = 0;
+        // Asumiendo que tienes un modelo Carrito y una relación con Producto
+        foreach (auth()->user()->carrito as $item) {
+            $total += $item->producto->precio * $item->cantidad;
+        }
+        return $total * 1.19; // Si los precios en la DB son sin IVA
+        // Si los precios en la DB ya tienen IVA, simplemente return $total;
+    }
 
     public function añadirCarrito(Request $req)
     {

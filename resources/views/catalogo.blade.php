@@ -40,9 +40,14 @@ $r = rand(1, 5);
         <div class="row">
             @foreach ($productos as $producto)
                 <div class="col-md-4 col-lg-3 mb-4 d-flex">
-                    <div class="card shadow-sm border-light rounded-lg overflow-hidden h-100">
-                        <img src="{{ $producto->imagen }}" class="card-img-top img-fluid" alt="{{ $producto->titulo }}"
-                            style="height: 200px; object-fit: cover;">
+                    <div class="card shadow-sm border-light rounded-lg overflow-hidden h-100 w-100">
+                        <!-- Contenedor para evitar desbordamiento -->
+                        <!-- Contenedor de imagen con altura fija y sin desbordamiento -->
+                        <div class="position-relative" style="height: 180px; overflow: hidden; background-color: #f8f9fa;">
+                            <img src="{{ $producto->imagen }}" class="position-absolute top-50 start-50 translate-middle"
+                                style="max-height: 100%; max-width: 100%; object-fit: cover;" alt="{{ $producto->titulo }}">
+                        </div>
+
 
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title text-center text-dark font-weight-bold">{{ $producto->titulo }}</h5>
@@ -51,7 +56,7 @@ $r = rand(1, 5);
                             </p>
                             <h4 class="text-center text-success mt-auto">${{ number_format($producto->precio, 2) }}</h4>
 
-                            <div class="d-flex justify-content-between gap-3 mt-3">
+                            <div class="d-flex justify-content-between gap-2 mt-3">
                                 <a href="{{ url('/producto/' . $producto->id) }}" class="btn btn-primary w-50">Detalle</a>
 
                                 <!-- Formulario de añadir al carrito -->
@@ -61,7 +66,7 @@ $r = rand(1, 5);
 
                                     <!-- Botón "Añadir" visible al inicio -->
                                     <div class="d-grid">
-                                        <button type="button" class="btn btn-success btn-sm btn-mostrar-cantidad"
+                                        <button type="button" class="btn btn-success w-100 btn-mostrar-cantidad"
                                             onclick="mostrarCantidad({{ $producto->id }})">
                                             Añadir
                                         </button>
@@ -70,15 +75,15 @@ $r = rand(1, 5);
                                     <!-- Contenedor oculto inicialmente: selector de cantidad + Confirmar -->
                                     <div id="contenedorCantidad{{ $producto->id }}" class="mt-2 d-none text-center">
                                         <div class="d-flex justify-content-center align-items-center mb-2">
-                                            <button type="button" class="btn btn-outline-secondary btn-sm"
+                                            <button type="button" class="btn btn-outline-secondary"
                                                 onclick="cambiarCantidad({{ $producto->id }}, -1)">−</button>
                                             <input type="number" name="cantidad" id="cantidad{{ $producto->id }}"
                                                 value="1" min="1" class="form-control mx-2 text-center"
                                                 style="width: 60px;">
-                                            <button type="button" class="btn btn-outline-secondary btn-sm"
+                                            <button type="button" class="btn btn-outline-secondary"
                                                 onclick="cambiarCantidad({{ $producto->id }}, 1)">+</button>
                                         </div>
-                                        <button type="submit" class="btn btn-primary btn-sm">Confirmar</button>
+                                        <button type="submit" class="btn btn-primary w-100">Confirmar</button>
                                     </div>
                                 </form>
                             </div>
@@ -93,6 +98,10 @@ $r = rand(1, 5);
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const userIsLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+    </script>
+
 
     <!-- Scripts de cantidad y AJAX -->
     <script>
@@ -104,21 +113,18 @@ $r = rand(1, 5);
                 valor += cambio;
 
                 if (valor < 1) {
-                    // Ocultar el contenedor de cantidad y mostrar el botón "Añadir"
                     const form = document.querySelector(`input[name="producto_id"][value="${id}"]`).closest('form');
                     const boton = form.querySelector('.btn-mostrar-cantidad');
                     const contenedor = document.getElementById(`contenedorCantidad${id}`);
 
                     contenedor.classList.add('d-none');
                     boton.classList.remove('d-none');
-
-                    input.value = 1; // Reiniciar el valor por si se vuelve a abrir
+                    input.value = 1;
                 } else {
                     input.value = valor;
                 }
             }
         }
-
 
         function mostrarCantidad(id) {
             const form = document.querySelector(`input[name="producto_id"][value="${id}"]`).closest('form');
@@ -132,6 +138,10 @@ $r = rand(1, 5);
         $(document).ready(function() {
             $('.formulario-carrito').submit(function(e) {
                 e.preventDefault();
+                if (!userIsLoggedIn) {
+                    alert('Debes iniciar sesión para añadir productos al carrito.');
+                    return;
+                }
                 var form = $(this);
 
                 $.ajax({
@@ -154,7 +164,6 @@ $r = rand(1, 5);
                             $('#mensaje-carrito').addClass('d-none').text('');
                         }, 3000);
 
-                        // Reinicia el formulario visual
                         form.find('.btn-mostrar-cantidad').removeClass('d-none');
                         form.find('[id^=contenedorCantidad]').addClass('d-none');
                         form.find('input[type=number]').val(1);

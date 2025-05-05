@@ -1,6 +1,11 @@
 @extends('Admin.adminMaster')
 @section('content')
     <h1 class="text-center mt-5 mb-5">Menú Productos</h1>
+    <div class="container">
+        <div class="row w-25 mx-auto">
+            <a href="producto/create" class="btn btn-primary mb-3">Agregar Producto</a>
+        </div>
+    </div>
     @include('mensajes')
     <div class="container">
         <table class="table table-light">
@@ -57,6 +62,6 @@
         </div>
 
 
-        <a href="producto/create" class="btn btn-primary mb-3">Agregar Producto</a>
+
     </div>
 @endsection

@@ -35,7 +35,7 @@
                     <td>{{ $comprador->address }}</td>
                     <td>
 
-                        <a class="btn btn-primary mb-2" href="{{ route('compradores.edit', $comprador->id) }}">Editar</a>
+                        <a class="btn btn-primary" href="{{ route('compradores.edit', $comprador->id) }}">Editar</a>
 
 
 

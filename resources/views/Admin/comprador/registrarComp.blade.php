@@ -54,7 +54,7 @@
                         <div class="col-md-6">
                             <label class="form-label fw-bold" for="direccion"><i class="bi bi-house-door"></i>
                                 Dirección</label>
-                            <input type="text" id="direccion" name="address" class="form-control" required
+                            <input type="text" id="address" name="address" class="form-control" required
                                 placeholder="Ej: Calle Falsa 123, Santiago" />
                         </div>
                     </div>
@@ -85,58 +85,11 @@
 
 
 
-    <!-- Script para mostrar/ocultar la contraseña -->
-    <script>
-        document.getElementById("togglePassword").addEventListener("click", function() {
-            let passwordField = document.getElementById("password");
-            let icon = this.querySelector("i");
+    {{ View::make('Templates.script') }}
+    <script src="{{ asset('js/google-autocomplete.js') }}"></script>
 
-            if (passwordField.type === "password") {
-                passwordField.type = "text";
-                icon.classList.remove("bi-eye-slash");
-                icon.classList.add("bi-eye");
-            } else {
-                passwordField.type = "password";
-                icon.classList.remove("bi-eye");
-                icon.classList.add("bi-eye-slash");
-            }
-        });
-
-
-        function limpiarRut(rut) {
-            return rut.replace(/[^0-9kK]/g, "").toUpperCase();
-        }
-
-        function formatearRut(rut) {
-            rut = limpiarRut(rut);
-            if (rut.length <= 1) return rut;
-
-            const cuerpo = rut.slice(0, -1);
-            const dv = rut.slice(-1);
-
-            // Agregar puntos cada tres dígitos desde el final
-            let cuerpoFormateado = "";
-            let i = 0;
-            for (let pos = cuerpo.length - 1; pos >= 0; pos--) {
-                cuerpoFormateado = cuerpo[pos] + cuerpoFormateado;
-                i++;
-                if (i % 3 === 0 && pos !== 0) {
-                    cuerpoFormateado = "." + cuerpoFormateado;
-                }
-            }
-
-            return cuerpoFormateado + "-" + dv;
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const rutInput = document.getElementById("rut");
-
-            rutInput.addEventListener("input", function(e) {
-                const cursor = rutInput.selectionStart;
-                const rutSinFormato = limpiarRut(rutInput.value);
-                const rutFormateado = formatearRut(rutSinFormato);
-                rutInput.value = rutFormateado;
-            });
-        });
-    </script>
+    {{-- Después el de Google Maps --}}
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}&libraries=places&language=es&region=CL&callback=initAutocomplete"
+        async defer></script>
 @endsection

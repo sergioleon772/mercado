@@ -5,8 +5,15 @@
 
     <div class="container mt-5 mb-5">
 
+
         <div class="d-flex justify-content-center row">
             <h1 class="text-center mb-5" style="font-weight: lighter;">Mis Ordenes</h1>
+            @if (session('success'))
+                <div class="alert alert-success text-center">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <div class="col-md-10">
                 @foreach ($ordenes as $fecha => $items)
                     @php

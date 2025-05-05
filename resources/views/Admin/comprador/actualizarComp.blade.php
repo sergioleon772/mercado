@@ -32,11 +32,17 @@
 
             <div class="mb-3">
                 <label>Dirección</label>
-                <input type="text" name="address" class="form-control" value="{{ $comprador->address }}">
+                <input type="text" id="address" name="address" class="form-control" value="{{ $comprador->address }}">
             </div>
 
             <button type="submit" class="btn btn-success">Actualizar</button>
             <a href="/compradores" class="btn btn-secondary">Volver</a>
         </form>
     </div>
+    <script src="{{ asset('js/google-autocomplete.js') }}"></script>
+
+    {{-- Después el de Google Maps --}}
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}&libraries=places&language=es&region=CL&callback=initAutocomplete"
+        async defer></script>
 @endsection

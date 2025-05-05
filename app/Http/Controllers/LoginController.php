@@ -36,6 +36,8 @@ class LoginController extends Controller
         }
 
         // Redirige después del login
+       
+
         return $this->authenticated($request, Auth::user());
     }
 

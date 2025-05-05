@@ -11,6 +11,7 @@ class RegisterController extends Controller
 {
     public function show(){
         if(Auth::check()){
+            
             return redirect('/');
         }
         return view('auth.registrarse');
@@ -22,6 +23,6 @@ class RegisterController extends Controller
             return redirect('/compradores')->with('success', 'Usuario creado correctamente');
         }
 
-        return redirect('/login')->with('success','Account created successfully');
+        return redirect('/login')->with('success','Cuenta creada con exito');
     }
 }

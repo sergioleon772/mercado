@@ -20,6 +20,17 @@ return [
         'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
         'scheme' => 'https',
     ],
+    
+    'mercadopago' => [
+    'public_key' => env('MERCADOPAGO_PUBLIC_KEY'),
+    'secret_key' => env('MERCADOPAGO_SECRET_KEY'),
+],
+
+'google_maps' => [
+  'key' => env('GOOGLE_MAP_KEY'),
+],
+
+
 
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
