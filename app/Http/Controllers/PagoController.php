@@ -26,7 +26,8 @@ class PagoController extends Controller
     public function crearPreferencia(Request $request)
 {
     try {
-        MercadoPagoConfig::setAccessToken(env('MERCADOPAGO_ACCESS_TOKEN'));
+       
+        MercadoPagoConfig::setAccessToken(config('services.mercadopago.secret_key'));
 
        
         $direccion = $request->input('direccion');

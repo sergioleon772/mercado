@@ -14,6 +14,9 @@ if [ ! -f .env ]; then
   echo "DB_DATABASE=$DB_DATABASE" >> .env
   echo "DB_USERNAME=$DB_USERNAME" >> .env
   echo "DB_PASSWORD=$DB_PASSWORD" >> .env
+  echo "MERCADOPAGO_ACCESS_TOKEN=$MERCADOPAGO_ACCESS_TOKEN" >> .env
+  echo "MERCADOPAGO_PUBLIC_KEY=$MERCADOPAGO_PUBLIC_KEY" >> .env
+  
 fi
 
 # Limpiar y cachear configuración
