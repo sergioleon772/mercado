@@ -25,6 +25,11 @@ return [
     'public_key' => env('MERCADOPAGO_PUBLIC_KEY'),
     'secret_key' => env('MERCADOPAGO_SECRET_KEY'),
 ],
+    'url' => [
+        'success' => env('MP_SUCCESS_URL'),
+        'failure' => env('MP_FAILURE_URL'),
+        'pending' => env('MP_PENDING_URL'),
+    ],
 
 'google_maps' => [
   'key' => env('GOOGLE_MAP_KEY'),

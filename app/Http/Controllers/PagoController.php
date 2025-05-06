@@ -46,11 +46,11 @@ $request->session()->put('direccion_envio', $direccion);
                 ],
             ],
             'back_urls' => [
-                'success' => env('MP_SUCCESS_URL'),
-    'failure' => env('MP_FAILURE_URL'),
-    'pending' => env('MP_PENDING_URL'),
-        
-    ],
+                'success' => config('services.url.success'),
+                'failure' => config('services.url.failure'),
+                'pending' => config('services.url.pending'),
+            ],
+    
     'auto_return' => 'approved',
             'statement_descriptor' => 'Mi tienda',
             'external_reference' => 'orden_1234',
